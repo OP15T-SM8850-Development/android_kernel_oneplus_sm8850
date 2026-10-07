@@ -89,6 +89,8 @@ def define_single_android_build(
     # Use the same external modules for installation and distribution.
     external_modules = define_oplus_ddk_modules(stem, name, variant)
     external_modules += define_techpack_modules(stem, name, variant)
+    if name == "canoe":
+        external_modules += ["//common-modules/wonder:wonder"]
 
     modules = registry.define_modules(
         stem,
