@@ -5,10 +5,23 @@ load("//build/kernel/kleaf:hermetic_tools.bzl", "hermetic_genrule")
 load("//build/kernel/kleaf:kernel.bzl", "kernel_build", "kernel_build_config")
 
 def define_qcom_dtb_setup():
+    native.filegroup(name = "empty_dtbo_config")
+
+    native.label_flag(
+        name = "dtbo_config",
+        build_setting_default = ":empty_dtbo_config",
+    )
+
+    native.config_setting(
+        name = "dtbo_config_unset",
+        flag_values = {":dtbo_config": ":empty_dtbo_config"},
+    )
+
     hermetic_genrule(
         name = "kconfig.dtb.generated",
         srcs = [
             ":kconfig.msm.generated",
+            "//{}/oplus/bazel:kconfig.oplus.generated".format(SOC_MODULES_REPO_PATH),
             "//{}/oplus/kernel/charger/bazel:kconfig.oplus_chg.generated".format(SOC_MODULES_REPO_PATH),
         ],
         outs = ["dtb/Kconfig.ext"],
